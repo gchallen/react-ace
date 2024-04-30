@@ -17,6 +17,7 @@ export interface IAceEditorProps {
     width?: string;
     className?: string;
     fontSize?: number | string;
+    lineHeight?: number | string;
     showGutter?: boolean;
     showPrintMargin?: boolean;
     highlightActiveLine?: boolean;

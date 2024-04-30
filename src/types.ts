@@ -103,12 +103,12 @@ export interface IAceOptions {
   tooltipFollowsMouse?: boolean;
   firstLineNumber?: number;
   overwrite?: boolean;
-  newLineMode?: boolean;
+  newLineMode?: "auto" | "unix" | "windows";
   useWorker?: boolean;
   useSoftTabs?: boolean;
   tabSize?: number;
   wrap?: boolean;
-  foldStyle?: boolean;
+  foldStyle?: "markbegin" | "markbeginend" | "manual";
   /** path to a mode e.g "ace/mode/text" */
   mode?: string;
   /** on by default */

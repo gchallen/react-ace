@@ -33,6 +33,7 @@ export interface IAceEditorProps {
   width?: string;
   className?: string;
   fontSize?: number | string;
+  lineHeight?: number | string;
   showGutter?: boolean;
   showPrintMargin?: boolean;
   highlightActiveLine?: boolean;
@@ -83,6 +84,7 @@ export default class ReactAce extends React.Component<IAceEditorProps> {
     height: PropTypes.string,
     width: PropTypes.string,
     fontSize: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    lineHeight: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     showGutter: PropTypes.bool,
     onChange: PropTypes.func,
     onCopy: PropTypes.func,
@@ -189,6 +191,7 @@ export default class ReactAce extends React.Component<IAceEditorProps> {
       focus,
       theme,
       fontSize,
+      lineHeight,
       value,
       defaultValue,
       showGutter,
@@ -203,7 +206,7 @@ export default class ReactAce extends React.Component<IAceEditorProps> {
       placeholder
     } = this.props;
 
-    this.editor = ace.edit(this.refEditor);
+    this.editor = ace.edit(this.refEditor) as IAceEditor;
 
     if (onBeforeLoad) {
       onBeforeLoad(ace);
@@ -233,11 +236,15 @@ export default class ReactAce extends React.Component<IAceEditorProps> {
       .setMode(
         typeof mode === "string" ? `ace/mode/${mode}` : (mode as Ace.SyntaxMode)
       );
-    if(theme && theme !== "")
-      this.editor.setTheme(`ace/theme/${theme}`);
+    if (theme && theme !== "") this.editor.setTheme(`ace/theme/${theme}`);
     this.editor.setFontSize(
       typeof fontSize === "number" ? `${fontSize}px` : fontSize
     );
+    if (lineHeight) {
+      this.editor.container.style.lineHeight =
+        typeof lineHeight === "number" ? `${lineHeight}px` : `${lineHeight}`;
+      this.editor.renderer.updateFontSize();
+    }
     this.editor
       .getSession()
       .setValue(!defaultValue ? value || "" : defaultValue);
@@ -344,7 +351,8 @@ export default class ReactAce extends React.Component<IAceEditorProps> {
     }
 
     // First process editor value, as it may create a new session (see issue #300)
-    const valueChanged = this.editor &&
+    const valueChanged =
+      this.editor &&
       nextProps.value != null &&
       this.editor.getValue() !== nextProps.value;
 
@@ -387,6 +395,13 @@ export default class ReactAce extends React.Component<IAceEditorProps> {
           ? `${nextProps.fontSize}px`
           : nextProps.fontSize
       );
+    }
+    if (nextProps.lineHeight !== oldProps.lineHeight) {
+      this.editor.container.style.lineHeight =
+        typeof nextProps.lineHeight === "number"
+          ? `${nextProps.lineHeight}px`
+          : nextProps.lineHeight;
+      this.editor.renderer.updateFontSize();
     }
     if (nextProps.wrapEnabled !== oldProps.wrapEnabled) {
       this.editor.getSession().setUseWrapMode(nextProps.wrapEnabled);

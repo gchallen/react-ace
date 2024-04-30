@@ -1,9 +1,7 @@
-import { Ace } from "ace-builds";
-import Editor = Ace.Editor;
 import * as PropTypes from "prop-types";
 import * as React from "react";
-import { IAceOptions, IAnnotation, ICommand, IEditorProps, IMarker } from "./types";
-interface IAceEditorClass extends Editor {
+import { IAceEditor, IAceOptions, IAnnotation, ICommand, IEditorProps, IMarker } from "./types";
+interface IAceEditorClass extends IAceEditor {
     [index: string]: any;
     $options?: any;
 }
@@ -56,7 +54,7 @@ export interface ISplitEditorProps {
     annotations?: IAnnotation[][];
     markers?: IMarker[][];
 }
-export default class SplitComponent extends React.Component<ISplitEditorProps, undefined> {
+export default class SplitComponent extends React.Component<ISplitEditorProps> {
     [index: string]: any;
     static propTypes: PropTypes.ValidationMap<ISplitEditorProps>;
     static defaultProps: Partial<ISplitEditorProps>;
